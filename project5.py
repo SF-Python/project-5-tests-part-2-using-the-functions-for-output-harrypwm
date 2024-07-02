@@ -1,24 +1,34 @@
 import random
-# Function to randomly select a port number and its corresponding protocol
 
 def main():
     "main function"
     
 def numToName(portNumArray: list[str], portNameArray: list[str], portNumber: str) -> str:
-    if portNumber in portNumArray:
+    """
+    This function takes in a list of port numbers, a list of corresponding protocol names, and a specific port number.
+    It returns the protocol name corresponding to the given port number, or a message if the port number is not found.
+    """
+    if portNumber in portNumArray:  
         index = portNumArray.index(portNumber)
         return portNameArray[index]
     else:
         return "Port number not found"
     
-def nameToNum(portNumArray: list[str], portNameArray: list[str], portName: str) -> list[str]:
-    indices = [i for i, x in enumerate(portNameArray) if x == portName]
-    if indices:
-        return [portNumArray[i] for i in indices]
-    else:
-        return ["Port name not found"]
+
+def nameToNum(portNumArray, portNameArray, portName):
+    result = []
+    index = 0
+    while index < len(portNameArray):
+        if portNameArray[index] == portName:
+            result.append(portNumArray[index])
+        index += 1
+    return result
     
 def getInput():
+    """
+    This function prompts the user for input until a valid choice is entered.
+    Valid choices are '1', '2', '3', or 'm'.
+    """
     while True:
         user_input = input("Enter your choice (1, 2, 3, or 'm'): ").rstrip()
         if user_input in ['1', '2', '3', 'm']:
@@ -28,68 +38,111 @@ def getInput():
 
         main()
 
+# Function to get the next port number and its corresponding protocol
+def get_next_port_protocol(index):
+    port_protocol_pairs = [
+        (20, "FTP"),
+        (21, "FTP"),
+        (22, "SSH"),
+        (23, "Telnet"),
+        (25, "SMTP"),
+        (53, "DNS"),
+        (67, "DHCP"),
+        (68, "DHCP"),
+        (80, "HTTP"),
+        (110, "POP3"),
+        (137, "NetBIOS"),
+        (139, "NetBIOS"),
+        (143, "IMAP"),
+        (161, "SNMP"),
+        (162, "SNMP"),
+        (389, "LDAP"),
+        (443, "HTTPS"),
+        (445, "SMB"),
+        (3389, "RDP")
+    ]
+    length = len(port_protocol_pairs)
+    # Use a mathematical function to simulate randomness
+    next_index = (index * 3 + 7) % length
+    return port_protocol_pairs[next_index]
 
-def random_port_protocol():
-   port_protocol_pairs = {
-       20: "FTP",
-       21: "FTP",
-       22: "SSH",
-       23: "Telnet",
-       25: "SMTP"
-   }
-   port = random.choice(list(port_protocol_pairs.keys()))
-   return port, port_protocol_pairs[port]
-# Function to randomly select a protocol and its corresponding port number
-def random_protocol_port():
-   port_protocol_pairs = {
-       20: "FTP",
-       21: "FTP",
-       22: "SSH",
-       23: "Telnet",
-       25: "SMTP"
-   }
-   protocol = random.choice(list(port_protocol_pairs.values()))
-   ports = [port for port, prot in port_protocol_pairs.items() if prot == protocol]
-   port = random.choice(ports)
-   return protocol, port
+# Function to get the next protocol and its corresponding port number
+def get_next_protocol_port(index):
+    port_protocol_pairs = [
+        (20, "FTP"),
+        (21, "FTP"),
+        (22, "SSH"),
+        (23, "Telnet"),
+        (25, "SMTP"),
+        (53, "DNS"),
+        (67, "DHCP"),
+        (68, "DHCP"),
+        (80, "HTTP"),
+        (110, "POP3"),
+        (137, "NetBIOS"),
+        (139, "NetBIOS"),
+        (143, "IMAP"),
+        (161, "SNMP"),
+        (162, "SNMP"),
+        (389, "LDAP"),
+        (443, "HTTPS"),
+        (445, "SMB"),
+        (3389, "RDP")
+    ]
+    length = len(port_protocol_pairs)
+    # Use a mathematical function to generate randomness
+    next_index = (index * 5 + 11) % length
+    return port_protocol_pairs[next_index]
+
 # Function to check user's answer
 def check_answer(question, answer):
-   if answer == question[1]:
-       return True
-   else:
-       return False
+    if answer == question[1]:
+        return True
+    else:
+        return False
+
 # Main program loop
 def main():
-   while True:
-       print("Choose an option:")
-       print("1. Given a port number, identify the PROTOCOL")
-       print("2. Given a port protocol, identify a port NUMBER")
-       print("3. Exit")
-       choice = input("Enter your choice (1/2/3): ")
-       if choice == '1':
-           print("Identify the protocol for the given port number:")
-           question = random_port_protocol()
-           user_answer = input(f"What protocol is associated with port {question[0]}? ").strip().upper()
-           if user_answer == 'M':
-               continue
-           elif check_answer(question, user_answer):
-               print("Correct!")
-           else:
-               print("Incorrect. The correct answer is:", question[1])
-       elif choice == '2':
-           print("Identify the port number for the given protocol:")
-           question = random_protocol_port()
-           user_answer = input(f"What port is associated with the protocol {question[0]}? ").strip().upper()
-           if user_answer == 'M':
-               continue
-           elif check_answer(question, user_answer):
-               print("Correct!")
-           else:
-               print("Incorrect. The correct answer is:", question[1])
-       elif choice == '3':
-           print("Exiting the program.")
-           break
-       else:
-           print("Invalid choice. Please enter 1, 2, or 3.")
+    port_index = 0
+    protocol_index = 0
+
+    while True:
+        print("Main Menu:")
+        print("1. Given a port number, identify the PROTOCOL (use abbreviation).")
+        print("2. Given a port protocol, identify a port NUMBER.")
+        print("3. Exit")
+        choice = input("Choice: ").strip()
+
+        if choice == '1':
+            print("Option 1: Identify the port's PROTOCOL.")
+            question = get_next_port_protocol(port_index)
+            port_index += 1
+            user_answer = input(f"What is the protocol for port {question[0]} (m=Main Menu)? ").strip()
+            if user_answer == 'M':
+                continue
+            elif check_answer(question, user_answer):
+                print("Correct answer!")
+            else:
+                print(f"Incorrect. The correct answer is {question[1]}.")
+
+        elif choice == '2':
+            print("Option 2: Identify the port's NUMBER.")
+            question = get_next_protocol_port(protocol_index)
+            protocol_index += 1
+            user_answer = input(f"What is the number for protocol {question[1]} (m=Main Menu)? ").strip()
+            if user_answer == 'M':
+                continue
+            elif check_answer((question[1], user_answer), str(question[0])):
+                print("Correct answer!")
+            else:
+                print(f"Incorrect. The correct answer is {question[0]}.")
+
+        elif choice == '3':
+            print("Program Complete. I hope this has helped in studying for the CompTIA A+ certification.")
+            break
+
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
 if __name__ == "__main__":
-   main()
+    main()
